@@ -19,8 +19,8 @@
             </div>
 
             <div class="space-x-12 font-bold">
-                <x-nav-link href="/" :active="request()->is('/')">Rent a Car</x-nav-link>
-                @if(request()->is('admin') || request()->is('admin/editor'))
+                <x-nav-link href="/" :active="request()->is('/') || request()->is('search*')">Rent a Car</x-nav-link>
+            @if(request()->is('admin') || request()->is('admin/editor'))
                     <x-nav-link href="/admin" :active="request()->is('admin')">Bookings</x-nav-link>
                     <x-nav-link href="/admin/editor" :active="request()->is('admin/editor')">Editor</x-nav-link>
                 @endif
@@ -30,7 +30,7 @@
                 <div>
                     <x-button href="/cars/create">Add a Car</x-button>
                 </div>
-            @elseif(request()->is('/') || request()->is('cars/create'))
+            @else
                 <div>
                     <x-button href="/admin">Admin</x-button>
                 </div>

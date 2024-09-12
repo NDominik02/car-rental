@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Gate;
 
 class CarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $inactiveCars = Car::where('isActive', 0)->orderBy('created_at', 'desc')->get();
@@ -23,18 +21,40 @@ class CarController extends Controller
             'activeCars' => $activeCars
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    public function search(Request $request)
+    {
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ], [
+            'start_date.required' => 'The start date is required.',
+            'start_date.date' => 'The start date must be a valid date.',
+            'end_date.required' => 'The end date is required.',
+            'end_date.date' => 'The end date must be a valid date.',
+            'end_date.after' => 'The end date must be a date after the start date.',
+        ]);
+
+        $startDate = $validated['start_date'];
+        $endDate = $validated['end_date'];
+
+        $availableCars = Car::whereDoesntHave('book', function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('start_date', [$startDate, $endDate])
+                ->orWhereBetween('end_date', [$startDate, $endDate])
+                ->orWhere(function ($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $startDate)
+                        ->where('end_date', '>=', $endDate);
+                });
+        })->get();
+
+        return view('cars.index', compact('availableCars'));
+    }
+
     public function create()
     {
         return view('cars.create');
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -69,26 +89,17 @@ class CarController extends Controller
         return redirect('/');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Car $car)
     {
         return view('cars.show', ['car' => $car]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Car $car)
     {
         return view('cars.edit', ['car' => $car]);
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCarRequest $request, Car $car)
     {
         Gate::authorize('edit-job', $car);
@@ -106,9 +117,6 @@ class CarController extends Controller
         return redirect('/cars/' . $car->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Car $car)
     {
         Gate::authorize('edit-job', $car);

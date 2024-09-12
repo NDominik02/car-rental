@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
+        Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Car::class)->constrained()->cascadeOnDelete();
             $table->string('name');
@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->integer('numOfDays');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->integer('cost');
             $table->timestamps();
         });
