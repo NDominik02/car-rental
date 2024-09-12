@@ -18,7 +18,7 @@
         <p>Address: {{ $booking->address }}</p>
         <p>Phone number: {{ $booking->phone }}</p>
         <p>Booking days: {{ $booking->numOfDays }}</p>
-        <p>Cost: {{ $booking->cost }}</p>
+        <p>Paid: {{ $booking->cost }}$</p>
     </div>
 
 </div>

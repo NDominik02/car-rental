@@ -15,9 +15,8 @@ class AdminController extends Controller
     public function index()
     {
         return view ('admins.index', [
-            'bookings' => Booking::all()
+            'bookings' => Booking::orderBy('id', 'desc')->get()
         ]);
-
     }
 
     public function editor()

@@ -1,6 +1,6 @@
 <x-layout>
 
-    <form method="POST" action="/cars/store" enctype="multipart/form-data">
+    <form method="POST" action="/admin/store" enctype="multipart/form-data">
         @csrf
 
         <div class="space-y-12">

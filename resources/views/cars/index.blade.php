@@ -39,12 +39,12 @@
                     <p>No cars available for the selected dates.</p>
                 @else
                     @foreach($availableCars as $car)
+                        <a href="/cars/{{ $car->id }}">
                         <x-car-card :$car />
+                        </a>
                     @endforeach
                 @endif
             @endif
-
-{{--        TODO - foglalás kezelése (katt a kocsira és booking form)--}}
 </div>
     </section>
 </x-layout>

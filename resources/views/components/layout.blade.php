@@ -26,9 +26,9 @@
                 @endif
             </div>
 
-            @if(request()->is('admin') || request()->is('admin/editor'))
+            @if(request()->is('admin') || request()->is('admin/editor') || request()->is('admin/create'))
                 <div>
-                    <x-button href="/cars/create">Add a Car</x-button>
+                    <x-button href="/admin/create">Add a Car</x-button>
                 </div>
             @else
                 <div>
