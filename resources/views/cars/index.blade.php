@@ -31,9 +31,9 @@
         </x-section-heading>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            <x-car-card />
-            <x-car-card />
-            <x-car-card />
+            @foreach($activeCars as $car)
+                <x-car-card :$car />
+            @endforeach
         </div>
     </section>
 </x-layout>
