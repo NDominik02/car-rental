@@ -13,11 +13,16 @@ Route::post('/cars/{car}/book', [CarController::class, 'placeBooking']);
 
 Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
-    Route::get('/admin/editor', [AdminController::class, 'editor']);
-});
 
-Route::get('/admin/create', [CarController::class, 'create']);
-Route::post('/admin/store', [CarController::class, 'store']);
+    Route::get('/admin/create', [CarController::class, 'create']);
+    Route::post('/admin/store', [CarController::class, 'store']);
+
+    Route::get('/admin/editor', [AdminController::class, 'editor']);
+    Route::get('/admin/editor/{car}', [AdminController::class, 'show']);
+
+    Route::put('/admin/editor/{car}', [AdminController::class, 'update']);
+
+});
 
 Route::get('/cars/{car}/edit', [CarController::class, 'edit'])
     ->middleware('auth')

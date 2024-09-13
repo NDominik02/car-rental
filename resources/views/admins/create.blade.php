@@ -26,7 +26,7 @@
                             <x-forms.form-input name="cost" id="cost" placeholder="Daily cost..." />
 
                             <x-forms.form-error name="cost" />
-                        </div>
+                           </div>
                     </x-forms.form-field>
 
                     <x-forms.form-field>
@@ -36,8 +36,8 @@
                             <x-forms.form-input name="logo" id="logo" type="file" />
                         </div>
                         <x-forms.form-error name="logo" />
-
                     </x-forms.form-field>
+
                 </div>
             </div>
         </div>

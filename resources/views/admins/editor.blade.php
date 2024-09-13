@@ -6,7 +6,9 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($activeCars as $car)
-                <x-car-card :$car />
+                <a href="/admin/editor/{{ $car->id }}">
+                    <x-car-card :$car />
+                </a>
             @endforeach
         </div>
     </section>
@@ -18,7 +20,9 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             @foreach($inactiveCars as $car)
+                <a href="/admin/editor/{{ $car->id }}">
                 <x-car-card :$car />
+                </a>
             @endforeach
         </div>
     </section>

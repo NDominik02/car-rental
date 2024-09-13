@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
+use Illuminate\Http\Request;
 use App\Models\Car;
 
 class AdminController extends Controller
@@ -49,32 +50,41 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show(Car $car)
     {
-        //
+        return view('admins.show', ['car' => $car]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Booking $booking)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $car = Car::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBookingRequest $request, Booking $booking)
-    {
-        //
-    }
+        $request->validate([
+            'type' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Booking $booking)
-    {
-        //
+        $car->type = $request->input('type');
+
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('public/car_images', $filename);
+
+            $car->logo = $filename;
+        }
+
+        $car->isActive = $request->has('isActive') ? 1 : 0;
+        $car->save();
+
+        if($car->isActive == 0)
+        {
+            $car->book()->delete();
+        }
+
+        return redirect()->back()->with('success', 'Car updated successfully');
     }
 }

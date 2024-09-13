@@ -13,12 +13,13 @@
     </div>
 
     <div class="ml-10">
-        <p>Name: {{ $booking->name }}</p>
-        <p>Email: {{ $booking->email }}</p>
-        <p>Address: {{ $booking->address }}</p>
-        <p>Phone number: {{ $booking->phone }}</p>
-        <p>Booking days: {{ $booking->numOfDays }}</p>
-        <p>Paid: {{ $booking->cost }}$</p>
+        <p><b>Name:</b> {{ $booking->name }}</p>
+        <p><b>Email:</b> {{ $booking->email }}</p>
+        <p><b>Address:</b> {{ $booking->address }}</p>
+        <p><b>Phone number:</b> {{ $booking->phone }}</p>
+        <p><b>Booking days:</b> {{ $booking->numOfDays }}
+        <p><b> From:</b> {{ $booking->start_date }} <b>Till:</b> {{ $booking->end_date }}</p>
+        <p><b>Paid:</b> {{ $booking->cost }}$</p>
     </div>
 
 </div>
