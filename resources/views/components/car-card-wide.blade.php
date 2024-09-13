@@ -3,7 +3,7 @@
 <div class="p-4 bg-zinc-800 rounded-xl flex">
 
     <div>
-        <div><img src="http://picsum.photos/seed/{{ rand(0, 100000) }}/250/116" alt="" class="rounded-xl"></div>
+        <div><x-car-logo :car="$booking->car" :width="250" :height="150"/></div>
 
 
     <div class="py-8 font-bold text-center">

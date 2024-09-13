@@ -52,7 +52,9 @@ class CarController extends Controller
                     $query->where('start_date', '<=', $startDate)
                         ->where('end_date', '>=', $endDate);
                 });
-        })->get();
+        })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         session(['start_date' => $startDate]);
         session(['end_date' => $endDate]);

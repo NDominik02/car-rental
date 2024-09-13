@@ -45,6 +45,6 @@
                     @endforeach
                 @endif
             @endif
-</div>
+        </div>
     </section>
 </x-layout>

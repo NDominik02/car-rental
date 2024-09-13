@@ -24,11 +24,3 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
 });
 
-Route::get('/cars/{car}/edit', [CarController::class, 'edit'])
-    ->middleware('auth')
-    ->can('edit', 'job');
-
-Route::patch('/cars/{car}', [CarController::class, 'update']);
-Route::delete('/cars/{car}', [CarController::class, 'destroy']);
-
-

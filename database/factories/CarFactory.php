@@ -31,7 +31,7 @@ class CarFactory extends Factory
 
         return [
             'type' => fake()->randomElement($carModels),
-            'logo' => fake()->imageUrl(),
+            'logo' => 'https://loremflickr.com/350/216/car?random=' . rand(),
             'dailyCost' => fake()->numberBetween(20, 80)
         ];
     }

@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Car;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use Illuminate\Http\Request;
-use App\Models\Car;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view ('admins.index', [
@@ -22,8 +19,10 @@ class AdminController extends Controller
 
     public function editor()
     {
-        $inactiveCars = Car::where('isActive', 0)->orderBy('created_at', 'desc')->get();
-        $activeCars = Car::where('isActive', 1)->orderBy('created_at', 'desc')->get();
+        $inactiveCars = Car::where('isActive', 0)->
+        orderBy('created_at', 'desc')->get();
+        $activeCars = Car::where('isActive', 1)->
+        orderBy('created_at', 'desc')->get();
 
         return view('admins.editor', [
             'inactiveCars' => $inactiveCars,
@@ -31,33 +30,16 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreBookingRequest $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Car $car)
     {
         return view('admins.show', ['car' => $car]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function update(Request $request, $id)
     {
         $car = Car::find($id);
