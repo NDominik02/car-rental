@@ -21,6 +21,5 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::get('/admin/editor/{car}', [AdminController::class, 'show']);
 
     Route::put('/admin/editor/{car}', [AdminController::class, 'update']);
-
 });
 

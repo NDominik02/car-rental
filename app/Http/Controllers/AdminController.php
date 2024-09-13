@@ -30,11 +30,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function store(StoreBookingRequest $request)
-    {
-        //
-    }
-
     public function show(Car $car)
     {
         return view('admins.show', ['car' => $car]);

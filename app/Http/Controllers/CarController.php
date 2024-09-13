@@ -141,4 +141,77 @@ class CarController extends Controller
         return view('cars.edit', ['car' => $car]);
 
     }
+
+    public function searchAPI(Request $request)
+    {
+        $validated = $request->validate([
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date|after_or_equal:today',
+        ]);
+
+        $startDate = $validated['start_date'];
+        $endDate = $validated['end_date'];
+
+        $availableCars = Car::where('isActive', 1)
+            ->whereDoesntHave('book', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate])
+                    ->orWhereBetween('end_date', [$startDate, $endDate])
+                    ->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->where('start_date', '<=', $startDate)
+                            ->where('end_date', '>=', $endDate);
+                    });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($availableCars);
+    }
+
+    public function placeBookingAPI(Request $request, $carId)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:15|regex:/^[0-9\-\(\)\/\+\s]*$/',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date|after_or_equal:today',
+        ]);
+
+        $car = Car::find($carId);
+        if (!$car || !$car->isActive) {
+            return response()->json(['error' => 'Car not found or not active'], 404);
+        }
+
+        $overlappingBookings = Booking::where('car_id', $carId)
+            ->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
+            ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
+            ->orWhere(function ($query) use ($validated) {
+                $query->where('start_date', '<=', $validated['start_date'])
+                    ->where('end_date', '>=', $validated['end_date']);
+            })
+            ->exists();
+
+        if ($overlappingBookings) {
+            return response()->json(['error' => 'The car is already booked for the selected period'], 400);
+        }
+
+        $numOfDays = Carbon::parse($validated['start_date'])->diffInDays(Carbon::parse($validated['end_date'])) + 1;
+        $cost = $car->daily_cost * $numOfDays;
+
+        $booking = new Booking([
+            'car_id' => $carId,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'address' => $validated['address'],
+            'phone' => $validated['phone'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'cost' => $cost,
+        ]);
+
+        $booking->save();
+
+        return response()->json($booking, 201);
+    }
 }
